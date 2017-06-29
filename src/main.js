@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ElementUI from 'element-ui'
+import NProgress from 'nprogress'; // Progress 进度条
+import 'nprogress/nprogress.css'; // Progress 进度条 样式
 import 'element-ui/lib/theme-default/index.css'
 import App from './App'
 import router from './router'
@@ -12,6 +14,35 @@ import $ from 'jquery'
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+const whiteList = ['/login']; // 不重定向白名单
+
+router.beforeEach((to, from, next) => {
+  NProgress.start() // 开启Progress
+  if (store.getters.token) { //是否存在token
+    console.log(1)
+    if (to.path === '/login') {
+      console.log(2)
+      next({ path: '/' })
+      NProgress.done()
+    } else{
+      console.log(3)
+      next()
+    }
+  } else {
+    if (whiteList.indexOf(to.path) !== -1) {
+      // 白名单内直接进入
+      next()
+    } else {
+      next('/login') // 重定向回登入页
+      NProgress.done()
+    }
+  }
+});
+
+router.afterEach(() => {
+  NProgress.done(); // 结束Progress
+});
 
 /* eslint-disable no-new */
 new Vue({

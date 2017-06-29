@@ -79,7 +79,9 @@ export default {
     },
     login() {
       console.log(this.loginForm)
-      this.$store.dispatch('Login', this.loginForm)
+      this.$store.dispatch('Login', this.loginForm).then(() => {
+        this.$router.push({ path: '/' })
+      })
     }
   }
 }
