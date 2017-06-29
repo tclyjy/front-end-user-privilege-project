@@ -1,6 +1,8 @@
 import axios from 'axios'
 import store from '../store'
-import { Message } from 'element-ui'
+import {
+  Message
+} from 'element-ui'
 // 创建axios实例
 const service = axios.create({
   baseURL: 'http://111.230.129.242:3000',
@@ -22,12 +24,12 @@ service.interceptors.request.use(config => {
 
 // response 拦截器
 
-service.interceptors.response.use(response => response,error =>{
+service.interceptors.response.use(response => response, error => {
   console.log(error)
   Message({
-    message:error.message,
-    type:'error',
-    duration: 5*1000
+    message: error.message,
+    type: 'error',
+    duration: 5 * 1000
   })
   return Promise.reject(error)
 })

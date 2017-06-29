@@ -11,10 +11,10 @@
             <h2>注册</h2>
             <form method="post" onsubmit="return false;">
               <div class="form-group">
-                <input type="text" placeholder="用户名">
+                <input type="text" placeholder="用户名" v-model="registerFrom.userName">
               </div>
               <div class="form-group">
-                <input type="password" placeholder="密码">
+                <input type="password" placeholder="密码" v-model="registerFrom.userPwd">
               </div>
               <div class="form-group">
                 <input type="password" placeholder="确认密码">
@@ -24,7 +24,7 @@
               </div>
             </form>
             <button @click="goLeft" class="off">登入</button>
-            <button>注册</button>
+            <button @click="register">注册</button>
           </div>
         </div>
         <div class="right">
@@ -57,6 +57,10 @@ export default {
       loginForm: {
         userName: '',
         userPwd: ''
+      },
+      registerFrom: {
+        userName: '',
+        userPwd: ''
       }
     }
   },
@@ -78,9 +82,20 @@ export default {
       });
     },
     login() {
-      console.log(this.loginForm)
-      this.$store.dispatch('Login', this.loginForm).then(() => {
+      this.$store.dispatch('Login', this.loginForm).then((res) => {
+        if(res === 'error') return
         this.$router.push({ path: '/' })
+      })
+    },
+    register() {
+      this.$store.dispatch('Register', this.registerFrom).then((res) => {
+        if(res === 'error') return
+        $('#slideBox').animate({
+          'marginLeft': '50%'
+        });
+        $('.topLayer').animate({
+          'marginLeft': '0'
+        });
       })
     }
   }
