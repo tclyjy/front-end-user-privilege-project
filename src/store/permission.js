@@ -29,11 +29,11 @@ function filterPrivilegeRouter(privilegeRouterMap, role) {
 const permission = {
   state: {
     routers: constantRouterMap,
-    addRouters: []
+    addRoutes: []
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
-      state.addRouters = routers;
+      state.addRoutes = routers;
       state.routers = constantRouterMap.concat(routers);
     }
   },
@@ -49,6 +49,7 @@ const permission = {
         } else {
           accessedRouters = filterPrivilegeRouter(privilegeRouterMap, role)
         }
+       
         commit('SET_ROUTERS', accessedRouters);
         resolve();
       })

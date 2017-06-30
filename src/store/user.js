@@ -42,7 +42,6 @@ const user = {
             })
             Cookies.set('Admin-Token', data.token)
             commit('SET_TOKEN', data.token)
-            commit('SET_ROLE', data.role)
             resolve()
           }
         }).catch(error => {
@@ -56,7 +55,7 @@ const user = {
       return new Promise((resolve, reject) => {
         register(userInfo.userName, userInfo.userPwd).then(response => {
           let data = response.data
-          console.log(data)
+          
           if (data.code === '0') {
             Message({
               message: data.msg,
@@ -70,7 +69,6 @@ const user = {
               type: 'success',
               duration: 5 * 1000
             })
-            commit('SET_ROLE', data.role)
             resolve()
           }
         }).catch(error => {
@@ -84,13 +82,7 @@ const user = {
       return new Promise((resolve, reject) => {
         checkToken(token).then(response => {
           let data = response.data
-          console.log(data);
           if (data.code === '0') {
-            Message({
-              message: '登入超时，即将跳转回登入页面',
-              type: 'error',
-              duration: 5 * 1000
-            })
             Cookies.remove('Admin-Token')
             commit('SET_TOKEN', undefined)
           } else {

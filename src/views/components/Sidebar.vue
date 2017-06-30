@@ -1,8 +1,8 @@
 <template>
   <el-menu mode="vertical" theme="dark" :default-active="$route.path">
     <div v-for="item in routers" :key="item">
-      <router-link v-if="!item.hidden&&item.noDropdown" :to="item.path">
-        <el-menu-item :index="item.path">
+      <router-link v-if="!item.hidden&&item.noDropdown" :to="item.path+'/'+item.children[0].path">
+        <el-menu-item :index="item.path+'/'+item.children[0].path">
           {{item.name}}
         </el-menu-item>
       </router-link>

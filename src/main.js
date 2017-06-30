@@ -10,10 +10,19 @@ import App from './App'
 import router from './router'
 import store from './store';
 import $ from 'jquery'
+import {
+  Message
+} from 'element-ui'
 
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+function hasPermission(role, permissionRoles) {
+  if (role === 'surperAdmin') return true; // admin权限 直接通过
+  if (!permissionRoles) return true;
+  return permissionRoles.indexOf(role) >= 0
+}
 
 const whiteList = ['/login']; // 不重定向白名单
 
@@ -21,43 +30,44 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // 开启Progress
   if (store.getters.token) { //是否存在token
     if (to.path === '/login') {
-      store.dispatch('getRole', store.getters.token).then(res => {
-        if (res.code === '0') {
-          console.log('跳转login' + store.getters.token)
-          next({
-            path: '/login'
-          })
-          NProgress.done()
-        } else {
-          store.dispatch('GenerateRoutes', res.role).then(() => {
-            next({
-              path: '/index'
-            })
-            NProgress.done()
-          })
-        }
+      // console.log(1)
+      next({
+        path: '/'
       })
     } else {
-      store.dispatch('getRole', store.getters.token).then(res => {
-        if (res.code === '0') {
-          next({
-            path: '/login'
+      // console.log(2)
+      if (store.getters.role === '') {
+        // console.log(3)
+        store.dispatch('getRole', store.getters.token).then(res => {
+          store.dispatch('GenerateRoutes', res.role).then(res => {
+            router.addRoutes(store.getters.addRoutes)
+            next(to.path)
           })
-          NProgress.done()
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        // console.log(4)
+        if (hasPermission(store.getters.role, to.meta.role)) {
+          // console.log(store.getters.role);
+          // console.log(to.meta.role);
+          next();
         } else {
-          store.dispatch('GenerateRoutes', res.role).then(() => {
-            next()
-            NProgress.done()
-          })
+          // console.log(5)
+          next({
+            path: '/401',
+            query: {
+              noGoBack: true
+            }
+          });
         }
-      })
+      }
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
-      // 白名单内直接进入
       next()
     } else {
-      next('/login') // 重定向回登入页
+      next('/login')
       NProgress.done()
     }
   }

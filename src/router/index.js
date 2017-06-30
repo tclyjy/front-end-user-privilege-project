@@ -12,29 +12,39 @@ import Form from '@/views/Form'
 Vue.use(Router)
 
 export const constantRouterMap = [{
-  path: '/',
+  path: '',
+  redirect: '/index',
   name: '首页',
   component: Home,
   hidden: false,
   noDropdown: true,
   children: [{
     path: 'index',
+    name: '首页',
     component: HomeIndex
   }]
 }, {
   path: '/form',
+  redirect: '/form/index',
   name: '表单填写',
-  component: Form,
+  component: Home,
   hidden: false,
-  noDropdown: true
+  noDropdown: true,
+  children: [{
+    path: 'index',
+    name: '表单填写',
+    component: Form
+  }]
 }, {
   path: '/login',
   name: 'Login',
   component: Login,
   hidden: true
 }, {
-  path: 'errpage',
+  path: '/errpage',
+  redirect: 'errpage/401',
   name: '错误页面',
+  component: Home,
   hidden: false,
   noDropdown: false,
   children: [{
@@ -50,7 +60,9 @@ export const constantRouterMap = [{
 
 export const privilegeRouterMap = [{
   path: '/user',
+  redirect: '/user/show',
   name: '用户管理',
+  component: Home,
   meta: {
     role: ['superAdmin', 'admin']
   },

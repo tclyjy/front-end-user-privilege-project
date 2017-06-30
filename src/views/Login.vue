@@ -86,7 +86,6 @@ export default {
       this.$store.dispatch('Login', this.loginForm).then((res) => {
         if (res === 'error') return
         let role = self.$store.getters.role
-        console.log(role)
         this.$router.push({ path: '/index' })
       })
     },
