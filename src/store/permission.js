@@ -1,6 +1,30 @@
 import {
-  constantRouterMap
+  constantRouterMap,
+  privilegeRouterMap
 } from '../router/index';
+
+// 获取用户权限匹配路由
+function hasPermission(role, route) {
+  if (route.meta && route.meta.role) {
+    return route.meta.role.indexOf(role) >= 0
+  } else {
+    return true
+  }
+}
+
+function filterPrivilegeRouter(privilegeRouterMap, role) {
+  const privilegeRouters = privilegeRouterMap.filter(route => {
+    if (hasPermission(role, route)) {
+      if (route.children && route.children.length) {
+        route.children = filterPrivilegeRouter(route.children, role)
+      }
+      return true
+    }
+    return false
+  })
+  return privilegeRouters
+}
+
 
 const permission = {
   state: {
@@ -16,16 +40,14 @@ const permission = {
   actions: {
     GenerateRoutes({
       commit
-    }, data) {
+    }, role) {
       return new Promise(resolve => {
-        const {
-          roles
-        } = data
+
         let accessedRouters
-        if (roles.indexOf('admin') >= 0) {
-          accessedRouters = asyncRouterMap
+        if (role === 'superAdmin') {
+          accessedRouters = privilegeRouterMap
         } else {
-          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+          accessedRouters = filterPrivilegeRouter(privilegeRouterMap, role)
         }
         commit('SET_ROUTERS', accessedRouters);
         resolve();

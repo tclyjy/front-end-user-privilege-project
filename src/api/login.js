@@ -1,7 +1,7 @@
 import fetch from '../utils/fetch'
 import md5 from 'js-md5'
 
-export function login(userName, userPwd) {
+export default function login(userName, userPwd) {
   let md5UserName = md5(userName)
   let md5UserPwd = md5(userPwd)
   

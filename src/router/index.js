@@ -3,6 +3,12 @@ import Router from 'vue-router'
 import Login from '@/views/Login'
 import Home from '@/views/Home'
 import HomeIndex from '@/views/HomeIndex'
+import UserShow from '@/views/UserShow'
+import Privilege from '@/views/Privilege'
+import page401 from '@/views/page401'
+import page404 from '@/views/page404'
+import Form from '@/views/Form'
+
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -16,13 +22,57 @@ export const constantRouterMap = [{
     component: HomeIndex
   }]
 }, {
+  path: '/form',
+  name: '表单填写',
+  component: Form,
+  hidden: false,
+  noDropdown: true
+}, {
   path: '/login',
   name: 'Login',
   component: Login,
   hidden: true
 }, {
-  path
+  path: 'errpage',
+  name: '错误页面',
+  hidden: false,
+  noDropdown: false,
+  children: [{
+    path: '401',
+    name: '401',
+    component: page401
+  }, {
+    path: '404',
+    name: '404',
+    component: page404
+  }]
 }]
+
+export const privilegeRouterMap = [{
+  path: '/user',
+  name: '用户管理',
+  meta: {
+    role: ['superAdmin', 'admin']
+  },
+  hidden: false,
+  noDropdown: false,
+  children: [{
+    path: 'show',
+    name: '用户列表',
+    meta: {
+      role: ['superAdmin', 'admin']
+    },
+    component: UserShow
+  }, {
+    path: 'privilege',
+    name: '权限管理',
+    meta: {
+      role: ['superAdmin']
+    },
+    component: Privilege
+  }]
+}]
+
 export default new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({

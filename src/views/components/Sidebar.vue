@@ -1,7 +1,7 @@
 <template>
   <el-menu mode="vertical" theme="dark" :default-active="$route.path">
     <div v-for="item in routers" :key="item">
-      <router-link v-if="!item.hidden&&item.noDropdown&&item.children.length>0" :to="item.path+''+item.children[0].path">
+      <router-link v-if="!item.hidden&&item.noDropdown" :to="item.path">
         <el-menu-item :index="item.path">
           {{item.name}}
         </el-menu-item>
@@ -11,8 +11,8 @@
           {{item.name}}
         </div>
         <div v-for="child in item.children" v-if='!child.hidden' :key="child">
-          <router-link class="menu-indent" :to="item.path+''+child.path">
-            <el-menu-item :index="item.path+''+child.path">
+          <router-link class="menu-indent" :to="item.path+'/'+child.path">
+            <el-menu-item :index="item.path+'/'+child.path">
               {{child.name}}
             </el-menu-item>
           </router-link>
@@ -37,6 +37,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+a {
+  text-decoration: none;
+}
+
 .el-menu {
   min-height: 100%;
 }

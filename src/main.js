@@ -20,14 +20,37 @@ const whiteList = ['/login']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start() // 开启Progress
   if (store.getters.token) { //是否存在token
-    console.log(1)
     if (to.path === '/login') {
-      console.log(2)
-      next({ path: '/' })
-      NProgress.done()
-    } else{
-      console.log(3)
-      next()
+      store.dispatch('getRole', store.getters.token).then(res => {
+        if (res.code === '0') {
+          console.log('跳转login' + store.getters.token)
+          next({
+            path: '/login'
+          })
+          NProgress.done()
+        } else {
+          store.dispatch('GenerateRoutes', res.role).then(() => {
+            next({
+              path: '/index'
+            })
+            NProgress.done()
+          })
+        }
+      })
+    } else {
+      store.dispatch('getRole', store.getters.token).then(res => {
+        if (res.code === '0') {
+          next({
+            path: '/login'
+          })
+          NProgress.done()
+        } else {
+          store.dispatch('GenerateRoutes', res.role).then(() => {
+            next()
+            NProgress.done()
+          })
+        }
+      })
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {

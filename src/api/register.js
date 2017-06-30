@@ -1,6 +1,6 @@
 import fetch from '../utils/fetch'
 
-export function register(userName, userPwd) {
+export default function register(userName, userPwd) {
 
   const data = {
     userName,

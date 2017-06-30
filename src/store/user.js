@@ -1,9 +1,6 @@
-import {
-  login
-} from '../api/login'
-import {
-  register
-} from '../api/register'
+import login from '../api/login'
+import register from '../api/register'
+import checkToken from '../api/checkToken'
 import Cookies from 'js-cookie'
 import {
   Message
@@ -76,6 +73,30 @@ const user = {
             commit('SET_ROLE', data.role)
             resolve()
           }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    getRole({
+      commit
+    }, token) {
+      return new Promise((resolve, reject) => {
+        checkToken(token).then(response => {
+          let data = response.data
+          console.log(data);
+          if (data.code === '0') {
+            Message({
+              message: '登入超时，即将跳转回登入页面',
+              type: 'error',
+              duration: 5 * 1000
+            })
+            Cookies.remove('Admin-Token')
+            commit('SET_TOKEN', undefined)
+          } else {
+            commit('SET_ROLE', data.role)
+          }
+          resolve(data)
         }).catch(error => {
           reject(error)
         })

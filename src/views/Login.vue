@@ -82,14 +82,17 @@ export default {
       });
     },
     login() {
+      var self = this;
       this.$store.dispatch('Login', this.loginForm).then((res) => {
-        if(res === 'error') return
-        this.$router.push({ path: '/' })
+        if (res === 'error') return
+        let role = self.$store.getters.role
+        console.log(role)
+        this.$router.push({ path: '/index' })
       })
     },
     register() {
       this.$store.dispatch('Register', this.registerFrom).then((res) => {
-        if(res === 'error') return
+        if (res === 'error') return
         $('#slideBox').animate({
           'marginLeft': '50%'
         });
