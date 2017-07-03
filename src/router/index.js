@@ -8,7 +8,7 @@ import Privilege from '@/views/Privilege'
 import page401 from '@/views/page401'
 import page404 from '@/views/page404'
 import Form from '@/views/Form'
-
+import Table from '@/views/Table'
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -34,6 +34,18 @@ export const constantRouterMap = [{
     path: 'index',
     name: '表单填写',
     component: Form
+  }]
+}, {
+  path: '/table',
+  redirect: '/table/index',
+  name: '表格',
+  component: Home,
+  hidden: false,
+  noDropdown: true,
+  children: [{
+    path: 'index',
+    name: '表格',
+    component: Table
   }]
 }, {
   path: '/login',

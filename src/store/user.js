@@ -2,6 +2,8 @@ import login from '../api/login'
 import register from '../api/register'
 import logout from '../api/logout'
 import checkToken from '../api/checkToken'
+import getPrivilege from '../api/getPrivilege'
+
 import Cookies from 'js-cookie'
 import {
   Message
@@ -10,7 +12,8 @@ import {
 const user = {
   state: {
     role: '',
-    token: Cookies.get('Admin-Token')
+    token: Cookies.get('Admin-Token'),
+    privileges: []
   },
   mutations: {
     SET_ROLE: (state, role) => {
@@ -18,6 +21,9 @@ const user = {
     },
     SET_TOKEN: (state, token) => {
       state.token = token;
+    },
+    SET_PRIVILEGE: (state, privileges) => {
+      state.privileges = privileges
     }
   },
   actions: {
@@ -43,6 +49,12 @@ const user = {
             })
             Cookies.set('Admin-Token', data.token)
             commit('SET_TOKEN', data.token)
+            console.log(response)
+            var privileges = []
+            for (let i = 0; i < response.data.privileges.length; i++) {
+              privileges.push(response.data.privileges[i].name)
+            }
+            commit('SET_PRIVILEGE', privileges);
             resolve()
           }
         }).catch(error => {
@@ -89,7 +101,17 @@ const user = {
           } else {
             commit('SET_ROLE', data.role)
           }
-          resolve(data)
+          getPrivilege().then(res => {
+            console.log(res)
+            var privileges = []
+            for (let i = 0; i < res.data.privileges.length; i++) {
+              privileges.push(res.data.privileges[i].name)
+            }
+            commit('SET_PRIVILEGE', privileges);
+            resolve(data)
+          }).catch(error => {
+            reject(error)
+          })
         }).catch(error => {
           reject(error)
         })
