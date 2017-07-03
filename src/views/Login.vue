@@ -64,6 +64,16 @@ export default {
       }
     }
   },
+  created() {
+    let that = this
+    document.onkeydown = function (e) {
+      let key
+      key = window.event.keyCode
+      if (key === 13) {
+        that.login()
+      }
+    }
+  },
   methods: {
     goRight() {
       $('#slideBox').animate({

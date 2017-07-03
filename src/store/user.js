@@ -1,5 +1,6 @@
 import login from '../api/login'
 import register from '../api/register'
+import logout from '../api/logout'
 import checkToken from '../api/checkToken'
 import Cookies from 'js-cookie'
 import {
@@ -55,7 +56,7 @@ const user = {
       return new Promise((resolve, reject) => {
         register(userInfo.userName, userInfo.userPwd).then(response => {
           let data = response.data
-          
+
           if (data.code === '0') {
             Message({
               message: data.msg,
@@ -93,6 +94,19 @@ const user = {
           reject(error)
         })
       })
+    },
+    // 登出
+    LogOut({
+      commit
+    }) {
+      return new Promise((resolve, reject) => {
+        logout().then(res => {
+          commit('SET_TOKEN', '');
+          commit('SET_ROLES', []);
+          Cookies.remove('Admin-Token');
+          resolve();
+        })
+      });
     }
   }
 }
