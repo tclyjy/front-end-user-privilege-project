@@ -29,6 +29,7 @@ const whiteList = ['/login']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start() // 开启Progress
   if (store.getters.token) { //是否存在token
+    console.log(router.options.routes);
     if (to.path === '/login') {
       // console.log(1)
       next({

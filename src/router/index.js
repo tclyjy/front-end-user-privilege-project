@@ -12,63 +12,75 @@ import Table from '@/views/Table'
 Vue.use(Router)
 
 export const constantRouterMap = [{
-  path: '',
-  redirect: '/index',
-  name: '首页',
-  component: Home,
-  hidden: false,
-  noDropdown: true,
-  children: [{
-    path: 'index',
+    path: '',
+    redirect: '/index',
     name: '首页',
-    component: HomeIndex
-  }]
-}, {
-  path: '/form',
-  redirect: '/form/index',
-  name: '表单填写',
-  component: Home,
-  hidden: false,
-  noDropdown: true,
-  children: [{
-    path: 'index',
-    name: '表单填写',
-    component: Form
-  }]
-}, {
-  path: '/table',
-  redirect: '/table/index',
-  name: '表格',
-  component: Home,
-  hidden: false,
-  noDropdown: true,
-  children: [{
-    path: 'index',
-    name: '表格',
-    component: Table
-  }]
-}, {
-  path: '/login',
-  name: 'Login',
-  component: Login,
-  hidden: true
-}, {
-  path: '/errpage',
-  redirect: 'errpage/401',
-  name: '错误页面',
-  component: Home,
-  hidden: false,
-  noDropdown: false,
-  children: [{
-    path: '401',
-    name: '401',
-    component: page401
+    component: Home,
+    hidden: false,
+    noDropdown: true,
+    children: [{
+      path: 'index',
+      name: '首页',
+      component: HomeIndex
+    }]
   }, {
-    path: '404',
+    path: '/form',
+    redirect: '/form/index',
+    name: '表单填写',
+    component: Home,
+    hidden: false,
+    noDropdown: true,
+    children: [{
+      path: 'index',
+      name: '表单填写',
+      component: Form
+    }]
+  }, {
+    path: '/table',
+    redirect: '/table/index',
+    name: '表格',
+    component: Home,
+    hidden: false,
+    noDropdown: true,
+    children: [{
+      path: 'index',
+      name: '表格',
+      component: Table
+    }]
+  }, {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    hidden: true
+  }, {
+    path: '/errpage',
+    redirect: 'errpage/401',
+    name: '错误页面',
+    component: Home,
+    hidden: false,
+    noDropdown: false,
+    children: [{
+      path: '401',
+      name: '401',
+      component: page401
+    }, {
+      path: '404',
+      name: '404',
+      component: page404
+    }]
+  },
+  {
+    path: '/401',
+    name: '401',
+    component: page401,
+    hidden: true
+  }, {
+    path: '/404',
     name: '404',
-    component: page404
-  }]
-}]
+    component: page404,
+    hidden: true
+  }
+]
 
 export const privilegeRouterMap = [{
   path: '/user',
@@ -95,6 +107,10 @@ export const privilegeRouterMap = [{
     },
     component: Privilege
   }]
+}, {
+  path: '*',
+  redirect: '/401',
+  hidden: true
 }]
 
 export default new Router({
