@@ -5,7 +5,7 @@ import {
 } from 'element-ui'
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://111.230.129.242:3000',
+  baseURL: 'https://yuanjiayi.wang:3000',
   timeout: 5000 // 请求超时
 })
 

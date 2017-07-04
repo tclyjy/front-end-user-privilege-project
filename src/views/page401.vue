@@ -6,7 +6,7 @@
     </div>
   </div>
 </template>
-<style lang="less">
+<style lang="less" scoped>
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
 .bg {
